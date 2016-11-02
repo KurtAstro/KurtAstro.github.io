@@ -45,6 +45,7 @@ html {
 .mbr-navbar__brand-link:after,
 .mbr-navbar__brand-img {
   max-height: 74px;
+  height: 100%;
 }
 .mbr-navbar:before,
 .mbr-navbar__container {
@@ -101,6 +102,9 @@ html {
 .mbr-navbar--short .mbr-navbar__brand-link:after,
 .mbr-navbar--short .mbr-navbar__brand-img {
   height: 40px;
+}
+.mbr-navbar--short .mbr-brand__logo .mbr-iconfont{
+  font-size: 40px;
 }
 .mbr-navbar--short:before,
 .mbr-navbar--short .mbr-navbar__container {
@@ -198,6 +202,9 @@ html {
   float: right;
   left: 0;
 }
+.float-left {
+  float: left;
+}
 .mbr-navbar__item {
   display: block;
   float: left;
@@ -273,6 +280,12 @@ html {
 .mbr-navbar--absolute {
   position: absolute;
 }
+/* fix for popup menu conflict */
+@media (max-width: 480px) {
+  .mbr-navbar--absolute.mbr-navbar[id^=menu-] {
+    position: absolute;
+  }
+}
 .mbr-navbar--transparent .mbr-navbar__section {
   background: none;
 }
@@ -287,6 +300,14 @@ html {
   .mbr-navbar--auto-collapse .mbr-navbar__column {
     display: block;
     width: 100%;
+  }
+  .mbr-navbar__column {
+    max-height: 100vh;
+    overflow-x: hidden;
+    overflow-y:auto;
+  }
+  .mbr-navbar__column::-webkit-scrollbar {
+    display:none;
   }
   .mbr-navbar--auto-collapse .mbr-navbar__items--right {
     padding-top: 13px;
@@ -809,7 +830,7 @@ html {
 }
 .mbr-figure {
   display: inline-block;
-  line-height: 1px;
+  /*line-height: 1px;*/
   margin: 0;
   max-width: 100%;
   overflow: hidden;
@@ -835,12 +856,65 @@ html {
 .mbr-figure__map {
   max-width: 100%;
 }
+@-webkit-keyframes mapCircleLoading {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+  }
+}
+@keyframes mapCircleLoading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
 .mbr-figure__map {
   height: 400px;
-  line-height: 1.3em;
+  position: relative;
 }
 .mbr-figure__map--short {
   height: 300px;
+}
+.mbr-figure__map iframe {
+  height: 100%;
+  width: 100%;
+}
+.mbr-figure__map [data-state-details] {
+  color: #6b6763;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  height: 1.5em;
+  margin-top: -0.75em;
+  padding-left: 20px;
+  padding-right: 20px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  width: 100%;
+}
+.mbr-figure__map[data-state] {
+  background: #e9e5dc;
+}
+.mbr-figure__map[data-state="loading"] [data-state-details] {
+  display: none;
+}
+.mbr-figure__map[data-state="loading"]::after {
+  content: "";
+  -webkit-animation: mapCircleLoading .6s infinite linear;
+  animation: mapCircleLoading .6s infinite linear;
+  border-radius: 50%;
+  border: 6px rgba(255, 255, 255, 0.35) solid;
+  border-top-color: #fff;
+  height: 40px;
+  left: 50%;
+  margin-left: -20px;
+  margin-top: -20px;
+  position: absolute;
+  top: 50%;
+  width: 40px;
 }
 .mbr-figure__caption {
   background: rgba(0, 0, 0, 0.5);
@@ -889,6 +963,7 @@ html {
 .mbr-figure__caption--std-grid {
   background: none;
   z-index: 2;
+  overflow: hidden;
 }
 @media (min-width: 768px) {
   .mbr-figure__caption--std-grid {
@@ -1254,6 +1329,15 @@ html {
   font-size: 15px !important;
 }
 @media (max-width: 991px) {
+  .mbr-buttons {
+    top: 0;
+  }
+  form:not(.mbr-form) .mbr-buttons {
+    top: 26px;
+  }
+  .mbr-buttons:first-child {
+    margin-top: 0;
+  }
   .mbr-buttons--active {
     left: 5px;
     text-align: center;
@@ -1262,6 +1346,9 @@ html {
   .mbr-buttons--active .mbr-buttons__link {
     margin-left: 0;
     margin-right: 0;
+  }
+  .mbr-buttons--right.mbr-buttons--only-links {
+    left: 0;
   }
   .mbr-buttons--active .mbr-buttons__link {
     font-size: 25px;
@@ -1452,10 +1539,15 @@ html {
   margin: 0;
   padding: 0;
 }
+.mbr-plan__details ul {
+  text-align: center;
+}
 .mbr-plan__details li,
 .mbr-plan__item {
   line-height: 40px;
   padding: 0 15px;
+}
+.mbr-plan__item {
   text-align: center;
 }
 .mbr-plan__buttons {
@@ -1571,6 +1663,59 @@ html {
 }
 .mbr-number--inverse-price .mbr-number__right {
   display: inline;
+}
+
+
+/* iconfont default styling */
+/* for buttons */
+.mbr-iconfont.mbr-iconfont-btn,
+.mbr-buttons__btn .mbr-iconfont{ /* depricated, used only for compatibility */
+  padding-right: 0.3em;
+  font-size: 2em;
+  line-height: 0.4em;
+  vertical-align: text-bottom;
+  position: relative;
+  top: -0.1em;
+  text-decoration:none;
+}
+
+/* menu links */
+.mbr-iconfont.mbr-iconfont-btn-parent,
+.mbr-buttons__link .mbr-iconfont{ /* depricated, used only for compatibility */
+  padding-right: 0.3em;
+  font-size: 1.5em;
+  position: relative;
+  top: -0.2em;
+  vertical-align:middle
+}
+
+/* msg-box4 */
+.mbr-iconfont.mbr-iconfont-msg-box4,
+.mbr-iconfont.mbr-iconfont-msg-box5{
+  font-size: 357px;
+  text-decoration:none;
+  color:#FFFFFF;
+}
+
+
+/*menu logo */
+.mbr-iconfont.mbr-iconfont-menu,
+.mbr-iconfont.mbr-iconfont-ext__menu{
+  font-size: 74px;
+  text-decoration:none;
+  color:#FFFFFF;
+}
+
+/* contacts1 */
+.mbr-iconfont.mbr-iconfont-contacts1{
+  font-size: 119px;
+  text-decoration:none;
+  color:#9C9C9C;
+}
+
+.mbr-iconfont.mbr-iconfont-features1{
+  font-size: 250px; /* ~ image.height */
+  text-decoration:none;
 }
 .engine {
 	position: absolute;
